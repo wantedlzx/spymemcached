@@ -53,6 +53,8 @@ import net.spy.memcached.protocol.binary.BinaryMemcachedNodeImpl;
 import net.spy.memcached.protocol.binary.BinaryOperationFactory;
 import net.spy.memcached.transcoders.SerializingTranscoder;
 import net.spy.memcached.transcoders.Transcoder;
+import net.spy.memcached.util.ExtendableThreadPoolExecutor;
+import net.spy.memcached.util.TaskQueue;
 
 /**
  * Default implementation of ConnectionFactory.
@@ -298,12 +300,12 @@ public class DefaultConnectionFactory extends SpyObject implements
         }
       };
 
-      executorService = new ThreadPoolExecutor(
+      executorService = new ExtendableThreadPoolExecutor(
         0,
         Runtime.getRuntime().availableProcessors(),
         60L,
         TimeUnit.SECONDS,
-        new LinkedBlockingQueue<Runnable>(),
+        new TaskQueue<Runnable>(),
         threadFactory
       );
     }
